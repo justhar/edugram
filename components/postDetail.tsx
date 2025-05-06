@@ -19,7 +19,6 @@ export default function PostDetail({ postId }: { postId: string }) {
         redirect("/");
       }
       setPost(data);
-      console.log(data);
     });
 
     getComment(postId).then((data) => {

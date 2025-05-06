@@ -20,7 +20,6 @@ export default function ProfileClient({ id }: { id: any }) {
         redirect("/404");
       }
       setUser(data);
-      console.log(data);
     });
 
     getUserPosts(id).then((data) => {

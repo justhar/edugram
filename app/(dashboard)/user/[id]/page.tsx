@@ -8,7 +8,6 @@ export default async function Profile({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  console.log(id);
 
   return <ProfileClient id={id} />;
 }

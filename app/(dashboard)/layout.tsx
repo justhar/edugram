@@ -28,8 +28,6 @@ export default function RootLayout({
     redirect("/sign");
   }
 
-  console.log("session", session);
-
   return (
     <div className="flex flex-row">
       <Sidebar session={session} />

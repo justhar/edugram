@@ -37,7 +37,6 @@ export function LoginForm({
     setError(null);
     setNewUser(null);
     const formData = new FormData(event.currentTarget);
-    console.log(formData);
     const username = formData.get("username") as string;
     const password = formData.get("password") as string;
     const school = formData.get("school") as string;

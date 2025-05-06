@@ -57,7 +57,6 @@ export default function GlobalChat(
       },
       body: JSON.stringify({ message, sender: user.user.email.split("@")[0] }),
     });
-    console.log(user);
 
     sendGlobalChat("fathan", message);
 
