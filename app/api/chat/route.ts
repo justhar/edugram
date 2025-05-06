@@ -8,7 +8,7 @@ const pusher = new Pusher({
   useTLS: true,
 });
 
-export async function POST(request: any) {
+export async function POST(request: any, res: any) {
   const body = await request.json();
   const { message, sender } = body;
   await pusher.trigger("chat", "chat-event", {
@@ -16,8 +16,7 @@ export async function POST(request: any) {
     sender,
   });
 
-  return new Response(JSON.stringify("success"), {
-    status: 201,
-    headers: { "Content-Type": "application/json" },
+  res.status(200).json({
+    message: "Message sent successfully",
   });
 }

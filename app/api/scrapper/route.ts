@@ -1,6 +1,6 @@
 import puppeteer from "puppeteer-core";
 
-export async function POST(request: Request, response: Response) {
+export async function POST(request: any, response: any) {
   const body = await request.json();
   const { username, password, school } = body;
   const browser = await puppeteer.connect({
@@ -32,22 +32,11 @@ export async function POST(request: Request, response: Response) {
       class: extractedClass,
     };
     await browser.close();
-    return new Response(JSON.stringify(text), {
-      status: 200,
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    response.status(200).json(text);
   } else {
     await browser.close();
-    return new Response(
-      JSON.stringify({ error: "Invalid username or password" }),
-      {
-        status: 401,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    response.status(401).json({
+      error: "Invalid username or password",
+    });
   }
 }
