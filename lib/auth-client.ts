@@ -26,7 +26,9 @@ export async function login(
 
     // Handle response if necessary
     if (response.status !== 200) {
-      throw new Error("Login failed, please check your credentials");
+      return {
+        error: "An error occurred",
+      };
     }
     const data = await response.json();
     return data;

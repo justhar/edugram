@@ -22,6 +22,7 @@ export async function sendGlobalChat(sender: string, message: string) {
 
 export async function getUserProfile(email: string) {
   const decodedId = decodeURIComponent(email);
+  console.log(decodedId);
   const user = await prisma.user.findUnique({
     where: {
       email: decodedId,

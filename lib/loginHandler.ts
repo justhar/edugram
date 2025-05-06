@@ -8,7 +8,6 @@ export default async function loginHandler(event: FormEvent<HTMLFormElement>) {
     body: formData,
   });
 
-  // Handle response if necessary
   const data = await response.json();
   return data;
 }
