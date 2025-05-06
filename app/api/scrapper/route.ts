@@ -1,6 +1,7 @@
+import { NextRequest } from "next/server";
 import puppeteer from "puppeteer-core";
 
-export async function POST(request: any, response: any) {
+export async function POST(request: Request) {
   const body = await request.json();
   const { username, password, school } = body;
   const browser = await puppeteer.connect({
@@ -32,11 +33,19 @@ export async function POST(request: any, response: any) {
       class: extractedClass,
     };
     await browser.close();
-    response.status(200).json(text);
+    return new Response(JSON.stringify(text), {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
   } else {
     await browser.close();
-    response.status(401).json({
-      error: "Invalid username or password",
+    return new Response(JSON.stringify({ error: "Invalid credentials" }), {
+      status: 401,
+      headers: {
+        "Content-Type": "application/json",
+      },
     });
   }
 }
