@@ -1,10 +1,6 @@
 "use client";
 
-import { getGlobalChat, sendGlobalChat } from "@/lib/db";
-import prisma from "@/lib/prisma";
 import pusherClient from "@/lib/pusherClient";
-import { redirect } from "next/navigation";
-import { send } from "process";
 import { useEffect, useState } from "react";
 
 type messageType = {
@@ -21,7 +17,13 @@ export default function GlobalChat(
 
   useEffect(() => {
     (async () => {
-      const data = await getGlobalChat();
+      const res = await fetch("/api/social/getglobalchat", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
       const reversedData = data.reverse();
       const sortedData = reversedData.map((item: any) => ({
         sender: item.sender,
@@ -58,7 +60,24 @@ export default function GlobalChat(
       body: JSON.stringify({ message, sender: user.user.email.split("@")[0] }),
     });
 
-    sendGlobalChat("fathan", message);
+    await fetch("/api/social/sendglobalchat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        message,
+        sender: user.user.email.split("@")[0],
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setMessages((prevState: any) => [
+          ...prevState,
+          { sender: data.sender, message: data.message },
+        ]);
+      })
+      .catch((err) => console.log(err));
 
     setLoading(false);
   };

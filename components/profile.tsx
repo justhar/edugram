@@ -3,7 +3,6 @@
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { signOutHandler, useSession } from "@/lib/auth-client";
-import { getUserPosts, getUserProfile } from "@/lib/db";
 import { useEffect, useState } from "react";
 import { redirect } from "next/navigation";
 import Post from "./post";
@@ -14,17 +13,18 @@ export default function ProfileClient({ id }: { id: any }) {
   const [posts, setPosts] = useState<any>(null);
 
   useEffect(() => {
-    getUserProfile(id).then((data) => {
-      //checks if the data is null or not
-      if (!data) {
-        redirect("/404");
-      }
-      setUser(data);
-    });
+    // Fetch the user profile data when the component mounts
+    fetch(`/api/social/getuserprofile?email=${id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setUser(data);
+      });
 
-    getUserPosts(id).then((data) => {
-      setPosts(data);
-    });
+    fetch(`/api/social/getuserposts?email=${id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setPosts(data);
+      });
   }, [id]);
 
   function handleSignOut() {

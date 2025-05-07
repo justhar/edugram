@@ -1,7 +1,6 @@
 "use client";
 
 import { useSession } from "@/lib/auth-client";
-import { postComment, postPost } from "@/lib/db";
 import { FileImage } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -19,7 +18,28 @@ export default function CommentInput({
 
   const handlePostSubmit = () => {
     setLoading(true);
-    postComment(postId, session?.user?.email as string, body);
+    fetch("/api/social/postcomment", {
+      method: "POST",
+      body: JSON.stringify({
+        postId: postId,
+        body: body,
+        mail: session?.user?.email,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.error) {
+          toast.error(data.error);
+          setLoading(false);
+          return;
+        }
+        toast.success("Comment posted successfully!");
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error("Something went wrong!");
+      });
+
     setBody("");
     setLoading(false);
     refreshComment((prev: any) => !prev);

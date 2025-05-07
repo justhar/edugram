@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { redirect, useRouter } from "next/navigation";
-import { getComment, getPost } from "@/lib/db";
+import { redirect } from "next/navigation";
 import Image from "next/image";
 import CommentInput from "./commentInput";
 import Comment from "./comment";
@@ -14,20 +13,24 @@ export default function PostDetail({ postId }: { postId: string }) {
   const [comments, setComments] = useState<any>([]);
 
   useEffect(() => {
-    getPost(postId).then((data) => {
-      if (!data) {
-        redirect("/");
-      }
-      setPost(data);
-    });
-
-    getComment(postId).then((data) => {
-      if (!data) {
-        // redirect("/");
-      }
-      setComments(data);
-    });
+    fetch("/api/social/getpost?postId=" + postId)
+      .then((res) => res.json())
+      .then((data) => {
+        if (!data) {
+          redirect("/");
+        }
+        setPost(data);
+      });
   }, [postId]);
+
+  useEffect(() => {
+    fetch("/api/social/getcomment?postId=" + postId)
+      .then((res) => res.json())
+      .then((data) => {
+        setComments(data);
+      });
+    setRefreshComment(false);
+  }, [refreshComment, postId]);
 
   if (!post) {
     return <div>Loading...</div>;

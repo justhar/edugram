@@ -4,7 +4,6 @@ import GlobalChat from "@/components/globalChat";
 import Post from "@/components/post";
 import PostInput from "@/components/postInput";
 import { useSession } from "@/lib/auth-client";
-import { getAllPosts } from "@/lib/db";
 import { useEffect, useState } from "react";
 
 export default function Home() {
@@ -13,9 +12,11 @@ export default function Home() {
   const { data } = useSession();
 
   useEffect(() => {
-    getAllPosts().then((data) => {
-      setPosts(data);
-    });
+    fetch("/api/social/getallposts")
+      .then((res) => res.json())
+      .then((data) => {
+        setPosts(data);
+      });
     setRefreshPost(false);
   }, [refreshPost]);
   return (

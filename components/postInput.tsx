@@ -15,7 +15,28 @@ export default function PostInput({ refreshPost }: { refreshPost: any }) {
 
   const handlePostSubmit = () => {
     setLoading(true);
-    postPost(session?.user?.email as string, postTitle, postBody);
+    fetch("/api/social/postpost", {
+      method: "POST",
+      body: JSON.stringify({
+        title: postTitle,
+        content: postBody,
+        authorId: session?.user?.email,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.error) {
+          toast.error(data.error);
+          setLoading(false);
+          return;
+        }
+        toast.success("Post created successfully!");
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error("Something went wrong!");
+      });
+
     setPostTitle("");
     setPostBody("");
     setLoading(false);

@@ -1,5 +1,3 @@
-import { getUserProfile } from "@/lib/db";
-import { redirect } from "next/navigation";
 import ProfileClient from "@/components/profile";
 
 export default async function Profile({
